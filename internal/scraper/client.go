@@ -2,29 +2,25 @@ package scraper
 
 import (
 	"net/http"
-	"net/url"
 	"time"
 )
 
+// Scraper — основная структура для работы с сайтом
 type Scraper struct {
-	client *http.Client
+	client  *http.Client
 	baseURL string
+	lat     string
+	lon     string
 }
 
-func NewScraper(baseURL string, proxyAddr string)(*Scraper,error){
-	transport := &http.Transport{}
-	if proxyAddr != "" {
-		proxyURL, err := url.Parse(proxyAddr)
-		if err != nil {
-			return nil, err
-		}
-		transport.Proxy = http.ProxyURL(proxyURL)
-	}
+// NewScraper создает новый экземпляр
+func NewScraper(baseURL, proxyAddr, lat, lon string) (*Scraper, error) {
 	return &Scraper{
 		baseURL: baseURL,
+		lat:     lat,
+		lon:     lon,
 		client: &http.Client{
-			Transport: transport,
-			Timeout: 30 * time.Second,
+			Timeout: 20 * time.Second,
 		},
 	}, nil
 }
